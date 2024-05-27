@@ -14,5 +14,6 @@ public class OfflineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_offline);
         Intent intent = getIntent();
         boolean isMusicOn = getIntent().getBooleanExtra("music",false);
+        //test
     }
 }
