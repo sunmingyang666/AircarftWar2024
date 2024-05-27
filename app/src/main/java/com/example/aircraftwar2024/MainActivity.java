@@ -11,4 +11,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);//new11
     }
+
+    public void offline(){
+        //onCreate(savedInstanceState);
+        setContentView(R.layout.activity_offline);
+
+    }
 }
