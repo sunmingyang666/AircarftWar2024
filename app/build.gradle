@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.aircarftwar2024'
+    namespace 'com.example.aircraftwar2024'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.aircarftwar2024"
+        applicationId "com.example.aircraftwar2024"
         minSdk 30
         targetSdk 33
         versionCode 1

@@ -1,4 +1,4 @@
-package com.example.aircarftwar2024;
+package com.example.aircraftwar2024;
 
 import org.junit.Test;
 
