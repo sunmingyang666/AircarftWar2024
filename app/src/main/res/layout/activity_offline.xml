@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OfflineActivity">
+    android:visibility="visible"
+    tools:context="com.example.aircraftwar2024.OfflineActivity">
 
   <androidx.constraintlayout.widget.Barrier
       android:id="@+id/barrier2"
