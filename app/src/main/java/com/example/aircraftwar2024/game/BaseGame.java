@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import androidx.annotation.NonNull;
 import com.example.aircraftwar2024.ImageManager;
+import com.example.aircraftwar2024.R;
 import com.example.aircraftwar2024.activity.GameActivity;
 import com.example.aircraftwar2024.aircraft.AbstractAircraft;
 import com.example.aircraftwar2024.aircraft.AbstractEnemyAircraft;
@@ -468,11 +469,22 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
 
     private void paintScoreAndLife() {
         /**TODO:动态绘制文本框显示英雄机的分数和生命值**/
+        Paint paintScore =new Paint();
+        paintScore.setColor(Color.RED);
+        paintScore.setTextSize(50);
+        canvas.drawText(String.valueOf(score),0,0,paintScore);
+
+        Paint paintLife=new Paint();
+        paintScore.setColor(Color.RED);
+        paintScore.setTextSize(50);
+        canvas.drawText(String.valueOf(heroAircraft.getHp()),0,0,paintScore);
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         /*TODO*/
+        mbLoop =true;
+        new Thread(this).start();
     }
 
     @Override
@@ -484,10 +496,14 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
         /*TODO*/
+        mbLoop =false;
     }
 
     @Override
     public void run() {
         /*TODO*/
+        while(mbLoop){
+            draw();
+        }
     }
 }
