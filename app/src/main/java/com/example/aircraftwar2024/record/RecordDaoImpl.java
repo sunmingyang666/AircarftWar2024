@@ -40,7 +40,7 @@ public class RecordDaoImpl implements RecordDao {
     @Override
     public void saveGameHistory() {
 
-        String filePath = "game_history.txt";
+        String filePath = "records.txt";
         try (FileWriter writer = new FileWriter(filePath)) {
             for (Record record : records) {
                 String line = String.join(",", valueOf(record.getRecordScore()), record.getRecordName(), record.getRecordTime()) + "\n"; // 使用逗号分隔每个字段，并添加换行符
@@ -56,7 +56,7 @@ public class RecordDaoImpl implements RecordDao {
 
     @Override
     public void readGameHistory() {
-        String filePath = "game_history.txt";
+        String filePath = "records.txt";
         try {
             // 创建一个文件读取器
             FileReader fr = new FileReader(filePath);
