@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".RecordActivity">
 
+    <ListView
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="66dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
