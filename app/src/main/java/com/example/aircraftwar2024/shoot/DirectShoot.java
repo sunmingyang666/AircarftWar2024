@@ -30,7 +30,7 @@ public class DirectShoot implements ShootStrategy {
         int x = abstractAircraft.getLocationX();
         int y = abstractAircraft.getLocationY() + abstractAircraft.getHeight() * direction / 2;
         int speedX = 0;
-        int speedY = (int) (abstractAircraft.getSpeedY() * rate + direction * 4);
+        int speedY = (int) (abstractAircraft.getSpeedY() * rate + direction * 10);
 
         AbstractBullet bullet;
         for (int i = 0; i < num; i++) {

@@ -1,4 +1,4 @@
-package com.example.aircraftwar2024;
+package com.example.aircraftwar2024.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.aircraftwar2024.R;
-import com.example.aircraftwar2024.activity.GameActivity;
 
 public class OfflineActivity extends AppCompatActivity {
     private Button easyButton,normalButton,difficultButton;
@@ -26,6 +25,7 @@ public class OfflineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OfflineActivity.this, GameActivity.class);
+                intent.putExtra("gameType",1);
                 startActivity(intent);
             }
         });
@@ -34,6 +34,7 @@ public class OfflineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OfflineActivity.this, GameActivity.class);
+                intent.putExtra("gameType",2);
                 startActivity(intent);
             }
         });
@@ -42,6 +43,7 @@ public class OfflineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OfflineActivity.this, GameActivity.class);
+                intent.putExtra("gameType",3);
                 startActivity(intent);
             }
         });

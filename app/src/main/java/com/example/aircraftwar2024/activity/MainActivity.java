@@ -1,4 +1,4 @@
-package com.example.aircraftwar2024;
+package com.example.aircraftwar2024.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         startBotton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,OfflineActivity.class);
+                Intent intent = new Intent(MainActivity.this, OfflineActivity.class);
                 boolean isMusicOn = radioButton1.isChecked();
                 intent.putExtra("music",isMusicOn);
                 startActivity(intent);

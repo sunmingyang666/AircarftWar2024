@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Handler;
 
 
 /**
@@ -50,7 +51,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     float clickX = 0, clickY=0;
 
     private int backGroundTop = 0;
-
+    private Handler handler;
     /**
      * 背景图片缓存，可随难度改变
      */
@@ -131,9 +132,9 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     private final EnemyFactory bossEnemyFactory;
     private final Random random = new Random();
 
-    public BaseGame(Context context){
+    public BaseGame(Context context, Handler handler){
         super(context);
-
+        this.handler = handler;
         mbLoop = true;
         mPaint = new Paint();  //设置画笔
         mSurfaceHolder = this.getHolder();
@@ -471,13 +472,15 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         /**TODO:动态绘制文本框显示英雄机的分数和生命值**/
         Paint paintScore =new Paint();
         paintScore.setColor(Color.RED);
-        paintScore.setTextSize(50);
-        canvas.drawText(String.valueOf(score),0,0,paintScore);
+        paintScore.setTextSize(70);
+        paintScore.setFakeBoldText(true);
+        canvas.drawText("Score:"+String.valueOf(score),50,100,paintScore);
 
         Paint paintLife=new Paint();
-        paintScore.setColor(Color.RED);
-        paintScore.setTextSize(50);
-        canvas.drawText(String.valueOf(heroAircraft.getHp()),0,0,paintScore);
+        paintLife.setColor(Color.RED);
+        paintLife.setTextSize(70);
+        paintLife.setFakeBoldText(true);
+        canvas.drawText("Life:"+String.valueOf(heroAircraft.getHp()),50,200,paintLife);
     }
 
     @Override
@@ -503,6 +506,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     public void run() {
         /*TODO*/
         while(mbLoop){
+            action();
             draw();
         }
     }

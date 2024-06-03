@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.example.aircraftwar2024.MainActivity">
+    tools:context="com.example.aircraftwar2024.activity.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -21,9 +21,19 @@
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="145dp"
-        android:layout_marginBottom="300dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginBottom="348dp"
         android:text="单机模式"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/startButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="152dp"
+        android:layout_marginBottom="296dp"
+        android:text="联机对战"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
