@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.example.aircraftwar2024.R;
 import com.example.aircraftwar2024.record.Record;
 import com.example.aircraftwar2024.record.RecordDao;
 import com.example.aircraftwar2024.record.RecordDaoImpl;

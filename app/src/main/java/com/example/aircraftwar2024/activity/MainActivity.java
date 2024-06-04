@@ -2,6 +2,8 @@ package com.example.aircraftwar2024.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import com.example.aircraftwar2024.R;
 public class MainActivity extends AppCompatActivity {
     private RadioButton radioButton1,radioButton2;
     private Button startBotton;
+
     //test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         radioButton1 = findViewById(R.id.radioButton1);
         radioButton2 = findViewById(R.id.radioButton2);
         startBotton = findViewById(R.id.startButton);
-
         radioButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,4 +42,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

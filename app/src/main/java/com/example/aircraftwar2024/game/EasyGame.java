@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.aircraftwar2024.ImageManager;
+import com.example.aircraftwar2024.activity.GameActivity;
+import com.example.aircraftwar2024.activity.MainActivity;
 import com.example.aircraftwar2024.aircraft.AbstractEnemyAircraft;
 
 import java.util.LinkedList;
