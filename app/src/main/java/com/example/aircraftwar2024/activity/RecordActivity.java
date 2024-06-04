@@ -34,6 +34,18 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_record);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this);
+        builder.setMessage("保存成功！")
+                .setTitle("提示");
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
         returnButton = findViewById(R.id.returnButton);
 
         returnButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +87,6 @@ public class RecordActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                //Map<String, Object> clkmap = (Map<String, Object>) arg0.getItemAtPosition(arg2);
                 AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this);
                 builder.setMessage("确定删除第" + (arg2 + 1) + "条数据？")
                         .setTitle("提示");
