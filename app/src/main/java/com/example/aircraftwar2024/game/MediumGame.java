@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.example.aircraftwar2024.ImageManager;
 
 public class MediumGame extends BaseGame{
+    private int gameType=2;
     public MediumGame(Context context) {
         super(context);
         this.backGround = ImageManager.BACKGROUND2_IMAGE;
@@ -35,4 +36,7 @@ public class MediumGame extends BaseGame{
         }
     }
 
+    public int getGameType() {
+        return gameType;
+    }
 }

@@ -62,4 +62,9 @@ public class HardGame extends BaseGame{
 
         return res;
     }
+
+    @Override
+    public int getGameType() {
+        return 3;
+    }
 }

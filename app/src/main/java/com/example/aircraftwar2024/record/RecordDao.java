@@ -1,5 +1,8 @@
 package com.example.aircraftwar2024.record;
 
+import android.content.Context;
+
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface RecordDao {
@@ -8,11 +11,11 @@ public interface RecordDao {
 
     void doAdd(Record record);
 
-    void doDelete(int recordIndex);
+    void doDelete(int gameType,int recordIndex);
 
-    void saveGameHistory();
+    void saveGameHistory(Context context);
 
-    void readGameHistory();
+    void readGameHistory(Context context);
 
     void printSortedRecord();
 }

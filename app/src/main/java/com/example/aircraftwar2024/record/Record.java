@@ -10,11 +10,14 @@ public class Record implements Comparable {
     private String recordName;
     private String time;
 
+    private int gameType=1;
 
-    public Record(int recordScore, String recordName, String time) {
+
+    public Record(int recordScore, String recordName, String time,int gameType) {
         this.recordScore = recordScore;
         this.recordName = recordName;
         this.time = time;
+        this.gameType=gameType;
     }
 
     public int getRecordScore() {
@@ -37,6 +40,9 @@ public class Record implements Comparable {
         return time;
     }
 
+    public int getGameType() {
+        return gameType;
+    }
 
     @Override
     public int compareTo(Object o) {

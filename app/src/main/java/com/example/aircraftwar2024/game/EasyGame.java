@@ -13,6 +13,7 @@ import java.util.List;
 
 
 public class EasyGame extends BaseGame{
+    private int gameType=1;
 
     public EasyGame(Context context) {
         super(context);
@@ -33,5 +34,7 @@ public class EasyGame extends BaseGame{
         return new LinkedList<>();
     }
 
-
+    public int getGameType() {
+        return gameType;
+    }
 }
