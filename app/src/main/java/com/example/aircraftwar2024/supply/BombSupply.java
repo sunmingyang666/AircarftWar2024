@@ -24,7 +24,6 @@ public class BombSupply extends AbstractFlyingSupply {
     @Override
     public void activate() {
         System.out.println("BombSupply active");
-        mySP.playMusic(1);
     }
 
 }
