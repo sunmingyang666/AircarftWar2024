@@ -146,7 +146,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     private final EnemyFactory bossEnemyFactory;
     private final Random random = new Random();
     MyMediaPlayer myMP = new MyMediaPlayer();
-
+    MySoundPool mySP = new MySoundPool();
 
     public BaseGame(Context context) {
         super(context);
