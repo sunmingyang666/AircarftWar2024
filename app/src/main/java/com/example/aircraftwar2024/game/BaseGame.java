@@ -393,6 +393,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
                     // 敌机损失一定生命值
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
+                    mySP.playMusic(2);
                     if (enemyAircraft.notValid()) {
                         //获得分数，产生道具补给
                         score += enemyAircraft.score();
@@ -416,6 +417,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             if (heroAircraft.crash(flyingSupply) || flyingSupply.crash(heroAircraft)) {
                 flyingSupply.activate();
                 flyingSupply.vanish();
+                mySP.playMusic(4);
             }
         }
     }
