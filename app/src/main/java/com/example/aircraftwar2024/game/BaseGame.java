@@ -417,6 +417,12 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             }
             if (heroAircraft.crash(flyingSupply) || flyingSupply.crash(heroAircraft)) {
                 flyingSupply.activate();
+                if(flyingSupply instanceof BombSupply){
+                    mySP.playMusic(1);
+                }
+                else{
+                    mySP.playMusic(4);
+                }
                 flyingSupply.vanish();
             }
         }
@@ -445,7 +451,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             gameOverFlag = true;
             mbLoop = false;
             myMP.endGame();
-            //mySP.playMusic(3);
+            mySP.playMusic(3);
             LocalDateTime currentDateTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = currentDateTime.format(formatter);
