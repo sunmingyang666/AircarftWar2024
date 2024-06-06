@@ -11,7 +11,6 @@ import com.example.aircraftwar2024.music.MySoundPool;
  * @author hitsz
  */
 public abstract class AbstractFlyingSupply extends AbstractFlyingObject {
-    public MySoundPool mySP = new MySoundPool();
     public AbstractFlyingSupply(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
     }
