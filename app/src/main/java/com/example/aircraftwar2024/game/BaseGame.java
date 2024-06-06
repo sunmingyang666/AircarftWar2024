@@ -52,7 +52,7 @@ import java.util.logging.Handler;
  * @author hitsz
  */
 public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Callback, Runnable {
-
+    //  
     public static final String TAG = "BaseGame";
     boolean mbLoop; //控制绘画线程的标志位
     private final SurfaceHolder mSurfaceHolder;
