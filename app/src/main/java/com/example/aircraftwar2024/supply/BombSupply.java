@@ -1,6 +1,8 @@
 package com.example.aircraftwar2024.supply;
 
 
+import com.example.aircraftwar2024.music.MySoundPool;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +17,6 @@ import java.util.List;
  */
 public class BombSupply extends AbstractFlyingSupply {
 
-    MySoundPool mySP = new MySoundPool();
     public BombSupply(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
     }

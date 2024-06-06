@@ -29,6 +29,7 @@ import com.example.aircraftwar2024.factory.enemy_factory.EliteFactory;
 import com.example.aircraftwar2024.factory.enemy_factory.EnemyFactory;
 import com.example.aircraftwar2024.factory.enemy_factory.MobFactory;
 import com.example.aircraftwar2024.music.MyMediaPlayer;
+import com.example.aircraftwar2024.music.MySoundPool;
 import com.example.aircraftwar2024.record.Record;
 import com.example.aircraftwar2024.record.RecordDao;
 import com.example.aircraftwar2024.record.RecordDaoImpl;
@@ -52,7 +53,7 @@ import java.util.logging.Handler;
  * @author hitsz
  */
 public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Callback, Runnable {
-    //  
+    //
     public static final String TAG = "BaseGame";
     boolean mbLoop; //控制绘画线程的标志位
     private final SurfaceHolder mSurfaceHolder;
@@ -417,7 +418,6 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             if (heroAircraft.crash(flyingSupply) || flyingSupply.crash(heroAircraft)) {
                 flyingSupply.activate();
                 flyingSupply.vanish();
-                mySP.playMusic(4);
             }
         }
     }
@@ -445,7 +445,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             gameOverFlag = true;
             mbLoop = false;
             myMP.endGame();
-            mySP.playMusic(3);
+            //mySP.playMusic(3);
             LocalDateTime currentDateTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = currentDateTime.format(formatter);
@@ -560,5 +560,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         this.isMusicOn = isMusicOn;
         myMP.setMusicOn(isMusicOn);
         myMP.playBGM(this.getContext());
+        mySP.setMusicOn(isMusicOn);
+        mySP.putMusic(this.getContext());
     }
 }

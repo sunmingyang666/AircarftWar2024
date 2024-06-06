@@ -3,6 +3,7 @@ package com.example.aircraftwar2024.supply;
 
 import com.example.aircraftwar2024.activity.GameActivity;
 import com.example.aircraftwar2024.basic.AbstractFlyingObject;
+import com.example.aircraftwar2024.music.MySoundPool;
 
 /**
  * 所有飞行道具的抽象父类。
@@ -10,7 +11,7 @@ import com.example.aircraftwar2024.basic.AbstractFlyingObject;
  * @author hitsz
  */
 public abstract class AbstractFlyingSupply extends AbstractFlyingObject {
-
+    public MySoundPool mySP = new MySoundPool();
     public AbstractFlyingSupply(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
     }

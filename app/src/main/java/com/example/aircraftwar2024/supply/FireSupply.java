@@ -33,6 +33,7 @@ public class FireSupply extends AbstractFlyingSupply {
         /**
          * 火力道具生效时，子弹数量在原有基础上+1，可叠加
          */
+        mySP.playMusic(4);
         Runnable fireUpTask = () -> {
             try {
 
