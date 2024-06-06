@@ -20,7 +20,6 @@ public class HpSupply extends AbstractFlyingSupply {
     public void activate() {
         HeroAircraft.getHeroAircraft().increaseHp(increasedHp);
         System.out.println("HpSupply active");
-        mySP.playMusic(4);
     }
 
 }
