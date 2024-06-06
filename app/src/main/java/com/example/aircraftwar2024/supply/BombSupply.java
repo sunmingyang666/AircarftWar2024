@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BombSupply extends AbstractFlyingSupply {
 
-
+    MySoundPool mySP = new MySoundPool();
     public BombSupply(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
     }
@@ -23,6 +23,7 @@ public class BombSupply extends AbstractFlyingSupply {
     @Override
     public void activate() {
         System.out.println("BombSupply active");
+        mySP.playMusic(1);
     }
 
 }
