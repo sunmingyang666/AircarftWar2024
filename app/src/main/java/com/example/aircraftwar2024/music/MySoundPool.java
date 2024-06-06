@@ -50,4 +50,7 @@ public class MySoundPool extends AppCompatActivity {
         }
     }//mysp.play(soundPoolMap.get(2),1,1,0,0,1);
 
+    public void playMusic(int order){
+       mysp.play(soundPoolMap.get(order),1,1,0,0,1); 
+    }
 }
