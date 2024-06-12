@@ -1,17 +1,14 @@
 package com.example.aircraftwar2024.activity;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aircraftwar2024.R;
 
@@ -25,63 +22,27 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MainActivity extends AppCompatActivity {
-    private RadioButton radioButton1,radioButton2;
-    private Button startBotton;
-    private Button onlineButton;
+public class OnlineActivity extends AppCompatActivity {
+
     private Socket socket;
     private PrintWriter writer;
     private Handler handler;
-    private EditText txt;
+
     private static  final String TAG = "MainActivity";
-    //test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        radioButton1 = findViewById(R.id.radioButton1);
-        radioButton2 = findViewById(R.id.radioButton2);
-        startBotton = findViewById(R.id.startButton);
-        onlineButton = findViewById(R.id.onlineButton);
-        radioButton1.setOnClickListener(new View.OnClickListener() {
+        handler = new Handler(getMainLooper()){
+            //当数据处理子线程更新数据后发送消息给UI线程，UI线程更新UI
             @Override
-            public void onClick(View view) {
-                if(radioButton2.isChecked()){
-                    radioButton2.setChecked(false);
+            public void handleMessage(Message msg){
+                if(msg.what == 1){
                 }
             }
-        });
-
-        startBotton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, OfflineActivity.class);
-                boolean isMusicOn = radioButton1.isChecked();
-                intent.putExtra("music",isMusicOn);
-                startActivity(intent);
-            }
-        });
-        onlineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("匹配中，请等待......")
-                        .setTitle("");
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                handler = new Handler(getMainLooper()){
-                    //当数据处理子线程更新数据后发送消息给UI线程，UI线程更新UI
-                    @Override
-                    public void handleMessage(Message msg){
-                        if(msg.what == 1){
-                        }
-                    }
-                };
-                new Thread(new MainActivity.NetConn(handler)).start();
-                System.out.println("1111111");
-            }
-        });
+        };
+        new Thread(new NetConn(handler)).start();
     }
+
     protected class NetConn extends Thread{
         private BufferedReader in;
         private Handler toClientHandler;
