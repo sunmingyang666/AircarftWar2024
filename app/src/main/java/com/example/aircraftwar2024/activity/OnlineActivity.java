@@ -47,7 +47,7 @@ public class OnlineActivity extends AppCompatActivity {
                     new Thread(() -> {
                         while (!view.isGameOverFlag()) {
                             //每隔五秒，发送自己的分数到服务器
-                            writer.println(view.getScore());
+                            MainActivity.writer.println(view.getScore());
                             try {
                                 Thread.sleep(5000);
                             } catch (InterruptedException e) {
@@ -55,7 +55,7 @@ public class OnlineActivity extends AppCompatActivity {
                             }
                         }
                         gameOverFlag = true; // 设置自己游戏结束标志
-                        writer.println("gameover");
+                        MainActivity.writer.println("gameover");
                     }
                     ).start();
                 }
@@ -65,9 +65,7 @@ public class OnlineActivity extends AppCompatActivity {
                     intent.putExtra("opponentScore",opponentScore);
                     intent.putExtra("myName",myName);
                     intent.putExtra("opName",opName);
-
                     startActivity(intent);
-                    Log.i(TAG,"跳转");
                 }
                 else if (msg.obj.startsWith("score:")) {
                     opponentScore = Integer.parseInt(serverMsg.split(":")[1]);
@@ -80,8 +78,7 @@ public class OnlineActivity extends AppCompatActivity {
     }
 
     private class NetConn extends Thread {
-
-        private final Handler handler;
+        private Handler handler;
 
         public NetConn(Handler handler) {
             this.handler = handler;
@@ -89,21 +86,13 @@ public class OnlineActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            try {
-                socket = new Socket();
-                socket.connect(new InetSocketAddress("10.0.2.2", 9999), 5000);
-                writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-                        socket.getOutputStream(), StandardCharsets.UTF_8
-                )), true);
-                reader = new BufferedReader(new InputStreamReader(
-                        socket.getInputStream(), StandardCharsets.UTF_8
-                ));
-
                 // 接收服务端信息
-                new Thread(() -> {
+            Thread receiveServerMsg = new Thread(){
+                @Override
+                    public void run(){
                     String msg;
                     try{
-                        while ((msg = reader.readLine()) != null){
+                        while ((msg = MainActivity.reader.readLine()) != null){
                             Message msgFromServer = new Message();
                             msgFromServer.what = 1;
                             msgFromServer.obj = msg;
@@ -112,12 +101,9 @@ public class OnlineActivity extends AppCompatActivity {
                     } catch(IOException e){
                         e.printStackTrace();
                     }
-                }).start();
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                }
+            };
+            receiveServerMsg.start();
         }
     }
 

@@ -29,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton radioButton1,radioButton2;
     private Button startBotton;
     private Button onlineButton;
-    private Socket socket;
-    private PrintWriter writer;
+    public  Socket socket;
+    public  PrintWriter writer;
+    public  BufferedReader reader;
     private Handler handler;
     private EditText txt;
     private Gameview view;
     private boolean isMusicOn;
+    public boolean isOnline;
     private static  final String TAG = "MainActivity";
     //test
     @Override
@@ -76,18 +78,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void handleMessage(Message msg){
                         if(msg.what == 1 && msg.obj.equals("start")){
+                            dialog.dismiss();
                             Intent intent = new Intent(MainActivity.this, OnlineActivity.class);
                             intent.putExtra("gameType",2);
                             intent.putExtra("music",isMusicOn);
                             startActivity(intent);
                         }
                     }
-                };
+                };        
+                new NetConn(handler).start();
             }
         });
     }
     private class NetConn extends Thread{
-        private BufferedReader reader;
         private Handler toClientHandler;
 
         public NetConn(Handler handler){
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread receiveServerMsg =  new Thread(){
                     @Override
                     public void run(){
-                        String msgFromserver = null;
+                        String msgFromserver;
                         try{
                             while((msgFromserver = reader.readLine())!=null)
                             {
