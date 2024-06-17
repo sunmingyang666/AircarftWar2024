@@ -27,67 +27,106 @@ public class OnlineActivity extends AppCompatActivity {
     private Socket socket;
     private PrintWriter writer;
     private Handler handler;
+    private BufferedReader reader;
+    private static int opponentScore=0;
+    private GameView view;
 
-    private static  final String TAG = "MainActivity";
+    private static boolean gameOverFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler(getMainLooper()){
-            //当数据处理子线程更新数据后发送消息给UI线程，UI线程更新UI
+        view = new HardGame(OnlineActivity.this);
+        view.setPlayMusic(MainActivity.myBinder != null);
+        setContentView(view);
+        Handler handler = new Handler(getMainLooper()) {
             @Override
-            public void handleMessage(Message msg){
-                if(msg.what == 1){
+            public void handleMessage(Message msg) {
+                if (msg.what == 1 && msg.obj.equals("start")) {
+                    new Thread(() -> {
+                        while (!view.isGameOverFlag()) {
+                            //每隔五秒，发送自己的分数到服务器
+                            writer.println(view.getScore());
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        writer.println("end");}
+                    ).start();
                 }
+                else if (msg.what == 1 && msg.obj.equals("gameover")) {
+                    setGameOverFlag(true);
+                    Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
+                    intent.putExtra("myScore",Game.score);
+                    intent.putExtra("opponentScore",opponentScore);
+                    intent.putExtra("myName",myName);
+                    intent.putExtra("opName",opName);
+
+                    startActivity(intent);
+                    Log.i(TAG,"跳转");
+                }
+
             }
         };
+
         new Thread(new NetConn(handler)).start();
+
     }
 
-    protected class NetConn extends Thread{
-        private BufferedReader in;
-        private Handler toClientHandler;
+    private class NetConn extends Thread {
 
-        public NetConn(Handler myHandler){
-            this.toClientHandler = myHandler;
+        private final Handler handler;
+
+        public NetConn(Handler handler) {
+            this.handler = handler;
         }
+
         @Override
-        public void run(){
-            try{
+        public void run() {
+            try {
                 socket = new Socket();
+                socket.connect(new InetSocketAddress("10.0.2.2", 9999), 5000);
+                writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+                        socket.getOutputStream(), StandardCharsets.UTF_8
+                )), true);
+                reader = new BufferedReader(new InputStreamReader(
+                        socket.getInputStream(), StandardCharsets.UTF_8
+                ));
 
-                socket.connect(new InetSocketAddress
-                        ("10.0.2.2",9999),5000);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
-                writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream(),"utf-8")),true);
-                Log.i(TAG,"connect to server");
-
-                //接收服务器返回的数据
-                Thread receiveServerMsg =  new Thread(){
-                    @Override
-                    public void run(){
-                        String fromserver = null;
-                        try{
-                            while((fromserver = in.readLine())!=null)
-                            {
-                                //发送消息给UI线程
-                                Message msg = new Message();
-                                msg.what = 1;
-                                msg.obj = fromserver;
-                                toClientHandler.sendMessage(msg);
-                            }
-                        }catch (IOException ex){
-                            ex.printStackTrace();
+                // 接收服务端信息
+                new Thread(() -> {
+                    String msg;
+                    try{
+                        while ((msg = reader.readLine()) != null){
+                            Message msgFromServer = new Message();
+                            msgFromServer.what = 1;
+                            msgFromServer.obj = msg;
+                            handler.sendMessage(msgFromServer);
                         }
+                    } catch(IOException e){
+                        e.printStackTrace();
                     }
-                };
-                receiveServerMsg.start();
-            }catch(UnknownHostException ex){
-                ex.printStackTrace();
-            }catch(IOException ex){
-                ex.printStackTrace();
+                }).start();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
+
+    public static int getOpponentScore() {
+        return opponentScore;
+    }
+
+    public void setGameOverFlag(boolean gameOverFlag) {
+        OnlineActivity.gameOverFlag = gameOverFlag;
+    }
+
+    public static boolean isGameOverFlag() {
+        return gameOverFlag;
+    }
+
 }

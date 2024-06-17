@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private PrintWriter writer;
     private Handler handler;
     private EditText txt;
+    private Gameview view;
+    private boolean isMusicOn;
     private static  final String TAG = "MainActivity";
     //test
     @Override
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, OfflineActivity.class);
-                boolean isMusicOn = radioButton1.isChecked();
+                isMusicOn = radioButton1.isChecked();
                 intent.putExtra("music",isMusicOn);
                 startActivity(intent);
             }
@@ -73,30 +75,32 @@ public class MainActivity extends AppCompatActivity {
                     //当数据处理子线程更新数据后发送消息给UI线程，UI线程更新UI
                     @Override
                     public void handleMessage(Message msg){
-                        if(msg.what == 1){
+                        if(msg.what == 1 && msg.obj.equals("start")){
+                            Intent intent = new Intent(MainActivity.this, OnlineActivity.class);
+                            intent.putExtra("gameType",2);
+                            intent.putExtra("music",isMusicOn);
+                            startActivity(intent);
                         }
                     }
                 };
-                new Thread(new MainActivity.NetConn(handler)).start();
-                System.out.println("1111111");
             }
         });
     }
-    protected class NetConn extends Thread{
-        private BufferedReader in;
+    private class NetConn extends Thread{
+        private BufferedReader reader;
         private Handler toClientHandler;
 
-        public NetConn(Handler myHandler){
-            this.toClientHandler = myHandler;
+        public NetConn(Handler handler){
+            this.toClientHandler = handler;
         }
         @Override
         public void run(){
             try{
                 socket = new Socket();
-
                 socket.connect(new InetSocketAddress
                         ("10.0.2.2",9999),5000);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
+                reader = new BufferedReader(new InputStreamReader(
+                    socket.getInputStream(),"utf-8"));
                 writer = new PrintWriter(new BufferedWriter(
                         new OutputStreamWriter(
                                 socket.getOutputStream(),"utf-8")),true);
@@ -106,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 Thread receiveServerMsg =  new Thread(){
                     @Override
                     public void run(){
-                        String fromserver = null;
+                        String msgFromserver = null;
                         try{
-                            while((fromserver = in.readLine())!=null)
+                            while((msgFromserver = reader.readLine())!=null)
                             {
                                 //发送消息给UI线程
                                 Message msg = new Message();
                                 msg.what = 1;
-                                msg.obj = fromserver;
+                                msg.obj = msgFromserver;
                                 toClientHandler.sendMessage(msg);
                             }
                         }catch (IOException ex){
@@ -122,10 +126,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 receiveServerMsg.start();
-            }catch(UnknownHostException ex){
-                ex.printStackTrace();
-            }catch(IOException ex){
-                ex.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
             }
         }
     }
