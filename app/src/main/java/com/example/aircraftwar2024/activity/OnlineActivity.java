@@ -43,6 +43,7 @@ public class OnlineActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1 && msg.obj.equals("start")) {
+                    String serverMsg = (String) msg.obj;
                     new Thread(() -> {
                         while (!view.isGameOverFlag()) {
                             //每隔五秒，发送自己的分数到服务器
@@ -53,11 +54,12 @@ public class OnlineActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        writer.println("end");}
+                        gameOverFlag = true; // 设置自己游戏结束标志
+                        writer.println("gameover");
+                    }
                     ).start();
                 }
-                else if (msg.what == 1 && msg.obj.equals("gameover")) {
-                    setGameOverFlag(true);
+                else if (msg.what == 1 && msg.obj.equals("bothGameover")) {
                     Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
                     intent.putExtra("myScore",Game.score);
                     intent.putExtra("opponentScore",opponentScore);
@@ -67,7 +69,9 @@ public class OnlineActivity extends AppCompatActivity {
                     startActivity(intent);
                     Log.i(TAG,"跳转");
                 }
-
+                else if (msg.obj.startsWith("score:")) {
+                    opponentScore = Integer.parseInt(serverMsg.split(":")[1]);
+                }
             }
         };
 
@@ -125,8 +129,6 @@ public class OnlineActivity extends AppCompatActivity {
         OnlineActivity.gameOverFlag = gameOverFlag;
     }
 
-    public static boolean isGameOverFlag() {
-        return gameOverFlag;
-    }
+
 
 }

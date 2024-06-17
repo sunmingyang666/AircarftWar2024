@@ -465,7 +465,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             Log.i(TAG, "heroAircraft is not Valid");
             Message msg = Message.obtain();
             msg.what = 1;
-            msg.obj = "over";
+            msg.obj = "gameover";
             GameActivity.mhandler.sendMessage(msg);
         }
 
@@ -568,5 +568,8 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         myMP.playBGM(this.getContext());
         mySP.setMusicOn(isMusicOn);
         mySP.putMusic(this.getContext());
+    }
+    public boolean isGameOverFlag() {
+        return gameOverFlag;
     }
 }

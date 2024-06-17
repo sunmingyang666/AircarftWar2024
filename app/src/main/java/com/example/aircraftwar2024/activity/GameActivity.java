@@ -72,7 +72,7 @@ public class GameActivity extends AppCompatActivity {
     class Mhandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
+            if (msg.what == 1 && msg.obj.equals("gameover")) {
                 Intent intent = new Intent(GameActivity.this, RecordActivity.class);
                 intent.putExtra("gameType", gameType);
                 startActivity(intent);
