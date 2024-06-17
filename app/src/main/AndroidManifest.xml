@@ -19,6 +19,9 @@
             android:name=".activity.OnlineActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.OverActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OfflineActivity"
             android:exported="false" />
         <activity

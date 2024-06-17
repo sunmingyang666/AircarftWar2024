@@ -29,13 +29,12 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton radioButton1,radioButton2;
     private Button startBotton;
     private Button onlineButton;
-    public  Socket socket;
-    public  PrintWriter writer;
-    public  BufferedReader reader;
-    private Handler handler;
+    public static Socket socket;
+    public PrintWriter writer;
+    public BufferedReader reader;
+    public Handler handler;
     private EditText txt;
-    private Gameview view;
-    private boolean isMusicOn;
+    public boolean isMusicOn;
     public boolean isOnline;
     private static  final String TAG = "MainActivity";
     //test
@@ -91,10 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private class NetConn extends Thread{
-        private Handler toClientHandler;
-
+        private Handler handler;
         public NetConn(Handler handler){
-            this.toClientHandler = handler;
+            this.handler = handler;
         }
         @Override
         public void run(){
@@ -121,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
                                 Message msg = new Message();
                                 msg.what = 1;
                                 msg.obj = msgFromserver;
-                                toClientHandler.sendMessage(msg);
+                                handler.sendMessage(msg);
+                                System.out.println(msg);
                             }
                         }catch (IOException ex){
                             ex.printStackTrace();

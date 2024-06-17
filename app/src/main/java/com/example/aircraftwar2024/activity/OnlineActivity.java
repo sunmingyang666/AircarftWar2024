@@ -1,16 +1,16 @@
 package com.example.aircraftwar2024.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.aircraftwar2024.R;
+import com.example.aircraftwar2024.game.BaseGame;
+import com.example.aircraftwar2024.game.HardGame;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,55 +20,59 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class OnlineActivity extends AppCompatActivity {
-
+    private static final String TAG = "OnlineActivity";
     private Socket socket;
     private PrintWriter writer;
     private Handler handler;
     private BufferedReader reader;
     private static int opponentScore=0;
-    private GameView view;
+    private BaseGame game;
 
-    private static boolean gameOverFlag = false;
+    private boolean gameOverFlag = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = new HardGame(OnlineActivity.this);
-        view.setPlayMusic(MainActivity.myBinder != null);
-        setContentView(view);
-        Handler handler = new Handler(getMainLooper()) {
+        boolean isMusicOn = getIntent().getBooleanExtra("music",false);
+
+        game = new HardGame(OnlineActivity.this);
+        game.setMusic(isMusicOn);
+        setContentView(game);
+        game.setOnline();
+        handler = new Handler(getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                if (msg.what == 1 && msg.obj.equals("start")) {
-                    String serverMsg = (String) msg.obj;
+                if (true) {
+                //if (msg.what == 1 && !msg.obj.equals("bothGameover")) {
                     new Thread(() -> {
-                        while (!view.isGameOverFlag()) {
+                        while (!game.isGameOverFlag()) {
                             //每隔五秒，发送自己的分数到服务器
-                            MainActivity.writer.println(view.getScore());
+                            writer.println(game.getScore());
+                            Log.i(TAG,"分数"+game.getScore());
                             try {
-                                Thread.sleep(5000);
+                                Thread.sleep(500);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
-                        gameOverFlag = true; // 设置自己游戏结束标志
-                        MainActivity.writer.println("gameover");
+                        gameOverFlag= game.isGameOverFlag();
+                        writer.println("gameover");
+                        Log.i(TAG,"游戏结束");
                     }
                     ).start();
                 }
-                else if (msg.what == 1 && msg.obj.equals("bothGameover")) {
+                else if (msg.what == 1 && msg.obj.equals("end")) {
                     Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
-                    intent.putExtra("myScore",Game.score);
+                    intent.putExtra("myScore", game.getScore());
                     intent.putExtra("opponentScore",opponentScore);
-                    intent.putExtra("myName",myName);
-                    intent.putExtra("opName",opName);
+
                     startActivity(intent);
                 }
-                else if (msg.obj.startsWith("score:")) {
-                    opponentScore = Integer.parseInt(serverMsg.split(":")[1]);
+                else if (msg.obj.toString().startsWith("score:")) {
+                    opponentScore = Integer.parseInt(msg.toString().split(":")[1]);
                 }
             }
         };
@@ -78,25 +82,34 @@ public class OnlineActivity extends AppCompatActivity {
     }
 
     private class NetConn extends Thread {
-        private Handler handler;
+        private Handler toClienthandler;
 
         public NetConn(Handler handler) {
-            this.handler = handler;
+            this.toClienthandler = handler;
         }
 
         @Override
         public void run() {
+            try {
+                socket = new Socket();
+                socket.connect(new InetSocketAddress
+                        ("10.0.2.2",9999),5000);
+                reader = new BufferedReader(new InputStreamReader(
+                        socket.getInputStream(),"utf-8"));
+                writer = new PrintWriter(new BufferedWriter(
+                        new OutputStreamWriter(
+                                socket.getOutputStream(),"utf-8")),true);
                 // 接收服务端信息
             Thread receiveServerMsg = new Thread(){
                 @Override
                     public void run(){
-                    String msg;
+                    String msgFromServer;
                     try{
-                        while ((msg = MainActivity.reader.readLine()) != null){
-                            Message msgFromServer = new Message();
-                            msgFromServer.what = 1;
-                            msgFromServer.obj = msg;
-                            handler.sendMessage(msgFromServer);
+                        while ((msgFromServer = reader.readLine()) != null){
+                            Message msg = new Message();
+                            msg.what = 1;
+                            msg.obj = msgFromServer;
+                            toClienthandler.sendMessage(msg);
                         }
                     } catch(IOException e){
                         e.printStackTrace();
@@ -104,6 +117,9 @@ public class OnlineActivity extends AppCompatActivity {
                 }
             };
             receiveServerMsg.start();
+        }catch (IOException ex){
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -112,9 +128,8 @@ public class OnlineActivity extends AppCompatActivity {
     }
 
     public void setGameOverFlag(boolean gameOverFlag) {
-        OnlineActivity.gameOverFlag = gameOverFlag;
+        this.gameOverFlag = gameOverFlag;
     }
-
 
 
 }

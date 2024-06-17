@@ -18,6 +18,7 @@ import com.example.aircraftwar2024.ImageManager;
 import com.example.aircraftwar2024.R;
 import com.example.aircraftwar2024.activity.GameActivity;
 import com.example.aircraftwar2024.activity.MainActivity;
+import com.example.aircraftwar2024.activity.OnlineActivity;
 import com.example.aircraftwar2024.aircraft.AbstractAircraft;
 import com.example.aircraftwar2024.aircraft.AbstractEnemyAircraft;
 import com.example.aircraftwar2024.aircraft.BossEnemy;
@@ -119,6 +120,8 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
 
     private boolean gameOverFlag = false;
     private int score = 0;
+
+    private boolean isOnline = false;
 
 
     /**
@@ -533,6 +536,15 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         paintLife.setTextSize(70);
         paintLife.setFakeBoldText(true);
         canvas.drawText("Life:" + String.valueOf(heroAircraft.getHp()), 50, 200, paintLife);
+
+        if(isOnline){
+        Paint paintOpponentScore = new Paint();
+        paintScore.setColor(Color.RED);
+        paintScore.setTextSize(70);
+        paintScore.setFakeBoldText(true);
+        canvas.drawText("OpponentScore:" + String.valueOf(OnlineActivity.getOpponentScore()), 500, 100, paintScore);
+
+        }
     }
 
     @Override
@@ -572,4 +584,5 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     public boolean isGameOverFlag() {
         return gameOverFlag;
     }
+    public void setOnline(){ isOnline = true;}
 }
