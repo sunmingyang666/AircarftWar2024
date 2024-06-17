@@ -25,13 +25,12 @@ public class OnlineActivity extends AppCompatActivity {
     private static final String TAG = "OnlineActivity";
     private Socket socket;
     private PrintWriter writer;
-    private Handler handler;
+
     private BufferedReader reader;
     private static int opponentScore=0;
     private BaseGame game;
-
+    private Handler handler;
     private boolean gameOverFlag = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,46 +41,41 @@ public class OnlineActivity extends AppCompatActivity {
         game.setMusic(isMusicOn);
         setContentView(game);
         game.setOnline();
+
         handler = new Handler(getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                if (true) {
-                //if (msg.what == 1 && !msg.obj.equals("bothGameover")) {
-                    new Thread(() -> {
-                        while (!game.isGameOverFlag()) {
-                            //每隔五秒，发送自己的分数到服务器
-                            writer.println(game.getScore());
-                            Log.i(TAG,"分数"+game.getScore());
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                new Thread(() ->{
+                    while (!gameOverFlag){
+                        writer.println(game.getScore());
+                        Log.i(TAG,"send score to server:"+game.getScore());
+                        try {
+                            Thread.sleep(5000);
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
                         }
-                        gameOverFlag= game.isGameOverFlag();
-                        writer.println("gameover");
-                        Log.i(TAG,"游戏结束");
                     }
-                    ).start();
-                }
-                else if (msg.what == 1 && msg.obj.equals("end")) {
-                    Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
-                    intent.putExtra("myScore", game.getScore());
-                    intent.putExtra("opponentScore",opponentScore);
+                    writer.println("gameover");
+                    Log.i(TAG,"send gameover to server");
+                    if(msg.what == 1 && msg.obj.equals("end")) {
+                        Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
+                        intent.putExtra("myScore", game.getScore());
+                        intent.putExtra("opponentScore",opponentScore);
+                        startActivity(intent);
+                        onDestroy();
+                    }
+                    else if (msg.obj.toString().startsWith("score:")) {
+                        opponentScore = Integer.parseInt(msg.toString().split(":")[1]);
+                    }
+                }).start();
 
-                    startActivity(intent);
-                }
-                else if (msg.obj.toString().startsWith("score:")) {
-                    opponentScore = Integer.parseInt(msg.toString().split(":")[1]);
-                }
             }
         };
-
         new Thread(new NetConn(handler)).start();
 
     }
 
-    private class NetConn extends Thread {
+    private class NetConn implements Runnable {
         private Handler toClienthandler;
 
         public NetConn(Handler handler) {
@@ -100,9 +94,7 @@ public class OnlineActivity extends AppCompatActivity {
                         new OutputStreamWriter(
                                 socket.getOutputStream(),"utf-8")),true);
                 // 接收服务端信息
-            Thread receiveServerMsg = new Thread(){
-                @Override
-                    public void run(){
+                new Thread(() ->{
                     String msgFromServer;
                     try{
                         while ((msgFromServer = reader.readLine()) != null){
@@ -111,13 +103,12 @@ public class OnlineActivity extends AppCompatActivity {
                             msg.obj = msgFromServer;
                             toClienthandler.sendMessage(msg);
                         }
-                    } catch(IOException e){
-                        e.printStackTrace();
-                    }
-                }
-            };
-            receiveServerMsg.start();
-        }catch (IOException ex){
+                        } catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }).start();
+
+                }catch (IOException ex){
                 ex.printStackTrace();
             }
         }
@@ -130,6 +121,24 @@ public class OnlineActivity extends AppCompatActivity {
     public void setGameOverFlag(boolean gameOverFlag) {
         this.gameOverFlag = gameOverFlag;
     }
-
+    protected void onDestroy(){
+        super.onDestroy();
+        disconnectFromServer();
+    }
+    private void disconnectFromServer(){
+        try {
+            if(writer!=null){
+                writer.close();
+            }
+            if(reader!=null){
+                reader.close();
+            }
+            if(socket!=null){
+                socket.close();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
 }
