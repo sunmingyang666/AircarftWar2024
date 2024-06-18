@@ -119,6 +119,8 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     protected int enemyMaxNumber = 5;
 
     private boolean gameOverFlag = false;
+
+    private int opponentScore = 10;
     private int score = 0;
 
     private boolean isOnline = false;
@@ -542,7 +544,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         paintScore.setColor(Color.RED);
         paintScore.setTextSize(70);
         paintScore.setFakeBoldText(true);
-        canvas.drawText("OpponentScore:" + String.valueOf(OnlineActivity.getOpponentScore()), 500, 100, paintScore);
+        canvas.drawText("OpponentScore:" + String.valueOf(opponentScore), 500, 100, paintScore);
 
         }
     }
@@ -581,8 +583,9 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         mySP.setMusicOn(isMusicOn);
         mySP.putMusic(this.getContext());
     }
-    public boolean isGameOverFlag() {
+    public boolean getGameOverFlag() {
         return gameOverFlag;
     }
     public void setOnline(){ isOnline = true;}
+    public void setOpponentScore(int opponentScore){ this.opponentScore = opponentScore;}
 }

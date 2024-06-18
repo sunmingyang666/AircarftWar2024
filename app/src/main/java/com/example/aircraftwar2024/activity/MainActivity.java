@@ -82,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("gameType",2);
                             intent.putExtra("music",isMusicOn);
                             startActivity(intent);
+                            try{
+                                socket.close();
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
                         }
                     }
                 };        

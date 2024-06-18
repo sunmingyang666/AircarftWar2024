@@ -27,10 +27,9 @@ public class OnlineActivity extends AppCompatActivity {
     private PrintWriter writer;
 
     private BufferedReader reader;
-    private static int opponentScore=0;
+    private int opponentScore=10;
     private BaseGame game;
     private Handler handler;
-    private boolean gameOverFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +45,22 @@ public class OnlineActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 new Thread(() ->{
-                    while (!gameOverFlag){
-                        writer.println(game.getScore());
-                        Log.i(TAG,"send score to server:"+game.getScore());
+                    while (!game.getGameOverFlag()){
                         try {
                             Thread.sleep(5000);
                         }catch (InterruptedException e){
                             e.printStackTrace();
                         }
+                    writer.println(game.getScore());
+                    Log.i(TAG,"send score to server:"+game.getScore());
                     }
                     writer.println("gameover");
                     Log.i(TAG,"send gameover to server");
-                    if(msg.what == 1 && msg.obj.equals("end")) {
-                        Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
-                        intent.putExtra("myScore", game.getScore());
-                        intent.putExtra("opponentScore",opponentScore);
-                        startActivity(intent);
-                        onDestroy();
+                    if(msg.obj.equals("end")) {
+
                     }
-                    else if (msg.obj.toString().startsWith("score:")) {
-                        opponentScore = Integer.parseInt(msg.toString().split(":")[1]);
+                    else if (msg.what == 2) {
+
                     }
                 }).start();
 
@@ -99,9 +94,27 @@ public class OnlineActivity extends AppCompatActivity {
                     try{
                         while ((msgFromServer = reader.readLine()) != null){
                             Message msg = new Message();
-                            msg.what = 1;
-                            msg.obj = msgFromServer;
-                            toClienthandler.sendMessage(msg);
+                            Log.i(TAG,"data back:"+msgFromServer);
+                            if(msgFromServer.startsWith("score:")){
+                                msg.what = 2;
+                                msg.obj = msgFromServer;
+                                Log.i(TAG,"msg.obj:"+msg.obj);
+                                opponentScore = Integer.parseInt(msgFromServer.split(":")[1]);
+                                toClienthandler.sendMessage(msg);
+                                game.setOpponentScore(opponentScore);
+                                Log.i(TAG,"oppo:"+opponentScore);
+                            }
+                            else if (msgFromServer=="end") {
+                                Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
+                                intent.putExtra("myScore", game.getScore());
+                                intent.putExtra("opponentScore",opponentScore);
+                                startActivity(intent);
+                                onDestroy();
+                            } else {
+                                msg.what = 1;
+                                msg.obj = msgFromServer;
+                                toClienthandler.sendMessage(msg);
+                            }
                         }
                         } catch(IOException e){
                             e.printStackTrace();
@@ -114,13 +127,7 @@ public class OnlineActivity extends AppCompatActivity {
         }
     }
 
-    public static int getOpponentScore() {
-        return opponentScore;
-    }
 
-    public void setGameOverFlag(boolean gameOverFlag) {
-        this.gameOverFlag = gameOverFlag;
-    }
     protected void onDestroy(){
         super.onDestroy();
         disconnectFromServer();
