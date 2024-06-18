@@ -31,8 +31,8 @@ public class OverActivity extends AppCompatActivity {
         opponentScore = getIntent().getIntExtra("opponentScore", 1);
         TextView myScoreText = findViewById(R.id.myScoreText);
         TextView opponentScoreText = findViewById(R.id.opponentScoreText);
-        myScoreText.setText(myScore);
-        opponentScoreText.setText(opponentScore);
+        myScoreText.setText(String.valueOf(myScore));
+        opponentScoreText.setText(String.valueOf(opponentScore));
     }
 
 }

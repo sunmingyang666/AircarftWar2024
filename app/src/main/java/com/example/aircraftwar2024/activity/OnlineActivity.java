@@ -24,8 +24,8 @@ import java.net.Socket;
 public class OnlineActivity extends AppCompatActivity {
     private static final String TAG = "OnlineActivity";
     private Socket socket;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private static PrintWriter writer;
+    private static BufferedReader reader;
     private int opponentScore=10;
     private BaseGame game;
     private Handler handler;
@@ -54,14 +54,11 @@ public class OnlineActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                        writer.println(Integer.toString(game.getScore()));
+                        Log.i(TAG,String.valueOf(game.getGameOverFlag()));
+                        if(writer != null) writer.println(Integer.toString(game.getScore()));
                     }
                     writer.println(Integer.toString(game.getScore()));
                     writer.println("gameover");
-                    if (writer != null) {
-                        writer.close();
-                        Log.i(TAG, "send gameover to server");
-                    }
                     while(!game.getOnlineEnd()){
                         try {
                             if(msg.what==3){
@@ -74,11 +71,17 @@ public class OnlineActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    Intent intent = new Intent(OnlineActivity.this, OfflineActivity.class);
-                    intent.putExtra("myScore", game.getScore());
-                    intent.putExtra("opponentScore",opponentScore);
-                    startActivity(intent);
-                    onDestroy();
+                    Log.i(TAG,"出来了");
+                    writer.println("shutdown");
+                    runOnUiThread(() ->{
+                        Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
+                        intent.putExtra("myScore", game.getScore());
+                        intent.putExtra("opponentScore",opponentScore);
+                        startActivity(intent);
+                        Log.i(TAG,"已跳转！！！");
+                        finish();
+                        Log.i(TAG,"没了");
+                    });
                 }).start();
 
             }
@@ -101,9 +104,11 @@ public class OnlineActivity extends AppCompatActivity {
                         ("10.0.2.2",9999),5000);
                 reader = new BufferedReader(new InputStreamReader(
                         socket.getInputStream(),"utf-8"));
-                writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream(),"utf-8")),true);
+                if(!game.getGameOverFlag()){
+                    writer = new PrintWriter(new BufferedWriter(
+                            new OutputStreamWriter(
+                                    socket.getOutputStream(),"utf-8")),true);
+                }
                 // 接收服务端信息
                 new Thread(() ->{
                     String msgFromServer;
@@ -130,7 +135,10 @@ public class OnlineActivity extends AppCompatActivity {
                             }
                         }
                         } catch(IOException e){
-                            e.printStackTrace();
+                            Log.e(TAG,"eff",e);
+                        }
+                        catch (NumberFormatException e){
+                            Log.e(TAG,"num",e);
                         }
                     }).start();
 
@@ -141,11 +149,11 @@ public class OnlineActivity extends AppCompatActivity {
     }
 
 
-    protected void onDestroy(){
+    public void onDestroy(){
         super.onDestroy();
         disconnectFromServer();
     }
-    private void disconnectFromServer(){
+    public void disconnectFromServer(){
         try {
             if(writer!=null){
                 writer.close();
