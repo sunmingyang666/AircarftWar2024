@@ -23,7 +23,7 @@ public class OverActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OverActivity.this, GameActivity.class);
+                Intent intent = new Intent(OverActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

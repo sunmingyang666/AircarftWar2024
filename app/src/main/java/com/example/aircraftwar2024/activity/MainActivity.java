@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                 msg.what = 1;
                                 msg.obj = msgFromserver;
                                 handler.sendMessage(msg);
-                                System.out.println(msg);
+                                Log.i(TAG,msgFromserver);
                             }
                         }catch (IOException ex){
                             ex.printStackTrace();

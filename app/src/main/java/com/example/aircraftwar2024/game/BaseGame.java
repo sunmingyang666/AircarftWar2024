@@ -124,7 +124,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
     private int score = 0;
 
     private boolean isOnline = false;
-
+    private boolean onlineEnd = false;
 
     /**
      * 周期（ms)
@@ -237,6 +237,7 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             postProcessAction();
         };
         task.run();
+
     }
 
     /**
@@ -468,14 +469,30 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
             recordDao.saveGameHistory(this.getContext());
 
             Log.i(TAG, "heroAircraft is not Valid");
-            Message msg = Message.obtain();
-            msg.what = 1;
-            msg.obj = "gameover";
-            GameActivity.mhandler.sendMessage(msg);
+            if (!isOnline) {
+                Message msg = Message.obtain();
+                msg.what = 1;
+                msg.obj = "gameover";
+                GameActivity.mhandler.sendMessage(msg);
+            }
+            else{
+                while(!onlineEnd){
+                    repaint();
+                    try {
+                        Thread.sleep(50);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
     }
-
+    private void repaint(){
+        synchronized (mSurfaceHolder){
+            draw();
+        }
+    }
     public void draw() {
         canvas = mSurfaceHolder.lockCanvas();
         if (mSurfaceHolder == null || canvas == null) {
@@ -500,16 +517,15 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
 
         paintImageWithPositionRevised(flyingSupplies);//道具
 
+        paintScoreAndLife();
 
         canvas.drawBitmap(ImageManager.HERO_IMAGE,
                 heroAircraft.getLocationX() - ImageManager.HERO_IMAGE.getWidth() / 2,
                 heroAircraft.getLocationY() - ImageManager.HERO_IMAGE.getHeight() / 2,
                 mPaint);
 
-        //画生命值和分数
-        paintScoreAndLife();
-
         mSurfaceHolder.unlockCanvasAndPost(canvas);
+
 
     }
 
@@ -540,12 +556,11 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         canvas.drawText("Life:" + String.valueOf(heroAircraft.getHp()), 50, 200, paintLife);
 
         if(isOnline){
-        Paint paintOpponentScore = new Paint();
-        paintScore.setColor(Color.RED);
-        paintScore.setTextSize(70);
-        paintScore.setFakeBoldText(true);
-        canvas.drawText("OpponentScore:" + String.valueOf(opponentScore), 500, 100, paintScore);
-
+            Paint paintOpponentScore = new Paint();
+            paintScore.setColor(Color.RED);
+            paintScore.setTextSize(70);
+            paintScore.setFakeBoldText(true);
+            canvas.drawText("OpponentScore:" + String.valueOf(opponentScore), 450, 100, paintScore);
         }
     }
 
@@ -587,5 +602,8 @@ public abstract class BaseGame extends SurfaceView implements SurfaceHolder.Call
         return gameOverFlag;
     }
     public void setOnline(){ isOnline = true;}
+    public boolean getOnline(){ return isOnline;}
     public void setOpponentScore(int opponentScore){ this.opponentScore = opponentScore;}
+    public void setOnlineEnd(){ onlineEnd = true;}
+    public boolean getOnlineEnd(){ return  onlineEnd;}
 }

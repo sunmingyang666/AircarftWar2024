@@ -25,7 +25,6 @@ public class OnlineActivity extends AppCompatActivity {
     private static final String TAG = "OnlineActivity";
     private Socket socket;
     private PrintWriter writer;
-
     private BufferedReader reader;
     private int opponentScore=10;
     private BaseGame game;
@@ -34,43 +33,60 @@ public class OnlineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean isMusicOn = getIntent().getBooleanExtra("music",false);
+        boolean isMusicOn = getIntent().getBooleanExtra("music", false);
 
         game = new HardGame(OnlineActivity.this);
         game.setMusic(isMusicOn);
-        setContentView(game);
         game.setOnline();
-
+        setContentView(game);
         handler = new Handler(getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                new Thread(() ->{
-                    while (!game.getGameOverFlag()){
+                new Thread(() -> {
+                    while (!game.getGameOverFlag()) {
+                        for (int i = 0; i < 100; i++) {
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if (game.getGameOverFlag()) {
+                                break;
+                            }
+                        }
+                        writer.println(Integer.toString(game.getScore()));
+                    }
+                    writer.println(Integer.toString(game.getScore()));
+                    writer.println("gameover");
+                    if (writer != null) {
+                        writer.close();
+                        Log.i(TAG, "send gameover to server");
+                    }
+                    while(!game.getOnlineEnd()){
                         try {
-                            Thread.sleep(5000);
-                        }catch (InterruptedException e){
+                            if(msg.what==3){
+                                game.setOnlineEnd();
+                                break;
+                            }
+                            Thread.sleep(50);
+                        }
+                        catch (InterruptedException e){
                             e.printStackTrace();
                         }
-                    writer.println(game.getScore());
-                    Log.i(TAG,"send score to server:"+game.getScore());
                     }
-                    writer.println("gameover");
-                    Log.i(TAG,"send gameover to server");
-                    if(msg.obj.equals("end")) {
-
-                    }
-                    else if (msg.what == 2) {
-
-                    }
+                    Intent intent = new Intent(OnlineActivity.this, OfflineActivity.class);
+                    intent.putExtra("myScore", game.getScore());
+                    intent.putExtra("opponentScore",opponentScore);
+                    startActivity(intent);
+                    onDestroy();
                 }).start();
 
             }
         };
         new Thread(new NetConn(handler)).start();
-
     }
 
-    private class NetConn implements Runnable {
+    private class NetConn extends Thread {
         private Handler toClienthandler;
 
         public NetConn(Handler handler) {
@@ -93,23 +109,20 @@ public class OnlineActivity extends AppCompatActivity {
                     String msgFromServer;
                     try{
                         while ((msgFromServer = reader.readLine()) != null){
-                            Message msg = new Message();
                             Log.i(TAG,"data back:"+msgFromServer);
+                            Message msg = new Message();
                             if(msgFromServer.startsWith("score:")){
                                 msg.what = 2;
                                 msg.obj = msgFromServer;
-                                Log.i(TAG,"msg.obj:"+msg.obj);
                                 opponentScore = Integer.parseInt(msgFromServer.split(":")[1]);
                                 toClienthandler.sendMessage(msg);
                                 game.setOpponentScore(opponentScore);
-                                Log.i(TAG,"oppo:"+opponentScore);
-                            }
-                            else if (msgFromServer=="end") {
-                                Intent intent = new Intent(OnlineActivity.this, OverActivity.class);
-                                intent.putExtra("myScore", game.getScore());
-                                intent.putExtra("opponentScore",opponentScore);
-                                startActivity(intent);
-                                onDestroy();
+                            } else if (msgFromServer.equals("end")) {
+                                game.setOnlineEnd();
+                                Log.i(TAG,"end");
+                                msg.what = 3;
+                                msg.obj = msgFromServer;
+                                toClienthandler.sendMessage(msg);
                             } else {
                                 msg.what = 1;
                                 msg.obj = msgFromServer;

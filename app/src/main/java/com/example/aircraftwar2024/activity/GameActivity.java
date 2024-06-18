@@ -23,7 +23,7 @@ public class GameActivity extends AppCompatActivity {
     private int gameType = 0;
     public static int screenWidth, screenHeight;
     public static Handler mhandler;
-
+    public BaseGame baseGameView = null;
 
 
     @Override
@@ -35,7 +35,6 @@ public class GameActivity extends AppCompatActivity {
         if (getIntent() != null) {
             gameType = getIntent().getIntExtra("gameType", 1);
         }
-        BaseGame baseGameView = null;
         if (gameType == 1) {
             baseGameView = new EasyGame(this);
         } else if (gameType == 2) {
@@ -72,7 +71,7 @@ public class GameActivity extends AppCompatActivity {
     class Mhandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1 && msg.obj.equals("gameover")) {
+            if (msg.what == 1 && msg.obj.equals("gameover")&& !baseGameView.getOnline()) {
                 Intent intent = new Intent(GameActivity.this, RecordActivity.class);
                 intent.putExtra("gameType", gameType);
                 startActivity(intent);
