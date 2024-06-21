@@ -1,6 +1,6 @@
-#Mon Jun 17 20:02:08 CST 2024
-base.0=D\:\\220110630\\AWServer\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-base.1=D\:\\220110630\\AWServer\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+#Fri Jun 21 21:31:21 CST 2024
+base.0=D\:\\homework\\Object_Oriented_Programming\\lab_software\\AWServer\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=D\:\\homework\\Object_Oriented_Programming\\lab_software\\AWServer\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 path.0=classes.dex
 path.1=0/classes.dex
 renamed.0=classes.dex

@@ -6,56 +6,56 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="30"
-8-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml
+8-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="34" />
-9-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml
+9-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:4:5-66
-11-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:4:22-64
+11-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:4:5-66
+11-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:4:22-64
 12
 13    <application
-13-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:5:5-14:32
+13-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:5:5-14:32
 14        android:allowBackup="true"
-14-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:6:9-35
+14-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:6:9-35
 15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-15-->[androidx.core:core:1.7.0] C:\Users\lenovo\.gradle\caches\transforms-3\a11b41a9c65e3bb3d5437e5ac8426594\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+15-->[androidx.core:core:1.7.0] E:\.gradle\caches\transforms-3\a11b41a9c65e3bb3d5437e5ac8426594\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
 16        android:dataExtractionRules="@xml/data_extraction_rules"
-16-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:7:9-65
+16-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:7:9-65
 17        android:debuggable="true"
 18        android:extractNativeLibs="false"
 19        android:fullBackupContent="@xml/backup_rules"
-19-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:8:9-54
+19-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:8:9-54
 20        android:icon="@mipmap/ic_launcher"
-20-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:9:9-43
+20-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:9:9-43
 21        android:label="@string/app_name"
-21-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:10:9-41
+21-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:10:9-41
 22        android:roundIcon="@mipmap/ic_launcher_round"
-22-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:11:9-54
+22-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:11:9-54
 23        android:supportsRtl="true"
-23-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:12:9-35
+23-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:12:9-35
 24        android:theme="@style/Theme.ServerSocket" >
-24-->D:\220110630\AWServer\app\src\main\AndroidManifest.xml:13:9-50
+24-->D:\homework\Object_Oriented_Programming\lab_software\AWServer\app\src\main\AndroidManifest.xml:13:9-50
 25        <provider
-25-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+25-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
 26            android:name="androidx.startup.InitializationProvider"
-26-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
+26-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
 27            android:authorities="com.example.serversocket.androidx-startup"
-27-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
+27-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
 28            android:exported="false" >
-28-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
+28-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
 29            <meta-data
-29-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+29-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
 30                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-30-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
+30-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
 31                android:value="androidx.startup" />
-31-->[androidx.emoji2:emoji2:1.0.0] C:\Users\lenovo\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
+31-->[androidx.emoji2:emoji2:1.0.0] E:\.gradle\caches\transforms-3\42f3b83b8e9a0a0c79e5fc3ff6d2d869\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
 32            <meta-data
-32-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\lenovo\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+32-->[androidx.lifecycle:lifecycle-process:2.4.0] E:\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
 33                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-33-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\lenovo\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+33-->[androidx.lifecycle:lifecycle-process:2.4.0] E:\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
 34                android:value="androidx.startup" />
-34-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\lenovo\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+34-->[androidx.lifecycle:lifecycle-process:2.4.0] E:\.gradle\caches\transforms-3\a37af28ce1785a92cd0521bcc7cc1858\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
 35        </provider>
 36    </application>
 37
